@@ -1,12 +1,16 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+// import router
+const authRoute = require('./routers/auth');
+const userRoute = require('./routers/user');
+
 dotenv.config();
 const cors = require("cors");
 
-// import router
-const authRoute = require('./routers/auth');
+
 
 // Set up default port
 const port = process.env.PORT || 5000;
@@ -28,10 +32,12 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
 // Router
 app.use('/api/auth', authRoute);
+app.use('/api/users', userRoute);
+
 
 app.listen(port, () => {
     console.log("Backend server is running on port " + port);
